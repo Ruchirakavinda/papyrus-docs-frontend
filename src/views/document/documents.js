@@ -20,7 +20,7 @@ import doc from "../../assests/doc.png";
 export default function Documemnts() {
   const theme = useTheme();
 
-  const Documents = (
+  const companyLetter = (
     <Grid item xs={12} md={3} lg={2} xl={2} m={2}>
       <Card sx={{ borderRadius: 5 }}>
         <Box display="flex" flexDirection="column" alignItems="center" p={2}>
@@ -60,6 +60,54 @@ export default function Documemnts() {
             sx={{ borderRadius: 2, px: 2, fontSize: 12, my: 2 }}
             component="a"
             href="/business_letter/preview"
+          >
+            View & Edit
+          </Button>
+        </Box>
+      </Card>
+    </Grid>
+  );
+
+  const payslips = (
+    <Grid item xs={12} md={3} lg={2} xl={2} m={2}>
+      <Card sx={{ borderRadius: 5 }}>
+        <Box display="flex" flexDirection="column" alignItems="center" p={2}>
+          <Box
+            display="flex"
+            flexDirection="row"
+            justifyContent="end"
+            alignItems="end"
+            sx={{ width: "100%" }}
+          >
+            <DeleteIcon
+              color="error"
+              fontSize="medium"
+              sx={{ cursor: "pointer", mb: -2, mr: -1 }}
+            />
+          </Box>
+          <CardMedia
+            component="img"
+            sx={{ width: "100%" }}
+            image={doc}
+            alt="Live from space album cover"
+          />
+          <Typography variant="text" mb={2}>
+            SamplName.pdf
+          </Typography>
+
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{ borderRadius: 2, px: 2, fontSize: 12 }}
+          >
+            Download
+          </Button>
+          <Button
+            variant="contained"
+            size="small"
+            sx={{ borderRadius: 2, px: 2, fontSize: 12, my: 2 }}
+            component="a"
+            href="/payslip/preview"
           >
             View & Edit
           </Button>
@@ -163,7 +211,7 @@ export default function Documemnts() {
                     mx={2}
                     variant="contained"
                     component="a"
-                    href=""
+                    href="/payslip"
                     sx={{ borderRadius: 2, px: 2, fontSize: 12 }}
                   >
                     Use Template
@@ -185,13 +233,41 @@ export default function Documemnts() {
           Your Documents
         </Typography>
         <Divider />
+        <Typography
+          color="textSecondary"
+          fontWeight="bold"
+          variant="text"
+          my={2}
+          display="flex"
+          justifyContent="start"
+        >
+          Business Letters
+        </Typography>
         <Grid container display="flex" justifyContent="space-between" my={2}>
-          {Documents}
-          {Documents}
-          {Documents}
-          {Documents}
-          {Documents}
-          {Documents}
+          {companyLetter}
+          {companyLetter}
+          {companyLetter}
+          {companyLetter}
+          {companyLetter}
+        </Grid>
+
+        <Divider />
+        <Typography
+          color="textSecondary"
+          fontWeight="bold"
+          variant="text"
+          my={2}
+          display="flex"
+          justifyContent="start"
+        >
+          Payslips
+        </Typography>
+        <Grid container display="flex" justifyContent="space-between" my={2}>
+          {payslips}
+          {payslips}
+          {payslips}
+          {payslips}
+          {payslips}
         </Grid>
       </Container>
     </>
