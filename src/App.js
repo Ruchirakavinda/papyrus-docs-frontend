@@ -9,6 +9,8 @@ import Projects from "./views/projects/projects";
 import Employees from "./views/employees/employees";
 import CreateBusinessLetter from "./views/document/templates/letter/createLetter";
 import ViewBusinessLetter from "./views/document/templates/letter/viewLetter";
+import CreatePaySlip from "./views/document/templates/payslip/createPayslip";
+import ViewPaySlip from "./views/document/templates/payslip/viewPayslip";
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
             path="/business_letter/preview"
             element={<ViewBusinessLetter />}
           />
+          <Route path="/payslip" element={<CreatePaySlip />} />
+          <Route path="/payslip/preview" element={<ViewPaySlip />} />
         </Routes>
         <Footer />
       </BrowserRouter>
