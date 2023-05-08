@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import BusinessLetter from "./businessLetter";
+import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
+import { useRef } from "react";
 
 export default function CreateBusinessLetter() {
   const [yourCompany, SetYourCompany] = useState("Your Company Name");
@@ -19,7 +21,7 @@ export default function CreateBusinessLetter() {
   );
   const [todayDate, SetTodayDate] = useState("12th January 2030");
   const [addresseeName, SetAddresseeName] = useState(" Addressee Name");
-  const [addresseeTitle, SetAddresseeTitle] = useState("Address Title");
+  const [addresseeTitle, SetAddresseeTitle] = useState("Addressee Title");
   const [addresseeCompany, SetAddresseeCompany] = useState("Addressee Company");
   const [companyAddress, SetCompanyAddress] = useState(
     "No 27, Prasannapura, Pitipana South, Homagama."
@@ -39,6 +41,14 @@ export default function CreateBusinessLetter() {
   const [companyWebsite, SetCompanyWebsite] = useState("www.yourwebsite.com");
   const [email, SetEmail] = useState("urmail@gmail.com");
   const [phone, SetPhone] = useState("+89 5810 2132");
+
+  const pdfExportComponent = useRef(null);
+
+  const exportPDFWithComponent = () => {
+    if (pdfExportComponent.current) {
+      pdfExportComponent.current.save();
+    }
+  };
 
   return (
     <>
@@ -278,6 +288,7 @@ export default function CreateBusinessLetter() {
                   mx={2}
                   variant="contained"
                   sx={{ borderRadius: 2, px: 2, ml: 5 }}
+                  onClick={exportPDFWithComponent}
                 >
                   Download
                 </Button>
@@ -296,31 +307,39 @@ export default function CreateBusinessLetter() {
               Preview
             </Typography>
             <Divider />
-            <Box
-              sx={{
-                boxShadow: "2px 2px 20px  rgba(0,0,0,0.1)",
-                borderRadius: 5,
-              }}
+
+            <PDFExport
+              ref={pdfExportComponent}
+              scale={0.8}
+              paperSize="A4"
+              margin="0.5cm"
             >
-              <BusinessLetter
-                yourCompany={yourCompany}
-                yourAddress={yourAddress}
-                todayDate={todayDate}
-                addresseeName={addresseeName}
-                addresseeTitle={addresseeTitle}
-                addresseeCompany={addresseeCompany}
-                companyAddress={companyAddress}
-                salutation={salutation}
-                body1={body1}
-                body2={body2}
-                body3={body3}
-                yourName={yourName}
-                yourTitle={yourTitle}
-                companyWebsite={companyWebsite}
-                email={email}
-                phone={phone}
-              />
-            </Box>
+              <Box
+                sx={{
+                  boxShadow: "2px 2px 20px  rgba(0,0,0,0.1)",
+                  borderRadius: 5,
+                }}
+              >
+                <BusinessLetter
+                  yourCompany={yourCompany}
+                  yourAddress={yourAddress}
+                  todayDate={todayDate}
+                  addresseeName={addresseeName}
+                  addresseeTitle={addresseeTitle}
+                  addresseeCompany={addresseeCompany}
+                  companyAddress={companyAddress}
+                  salutation={salutation}
+                  body1={body1}
+                  body2={body2}
+                  body3={body3}
+                  yourName={yourName}
+                  yourTitle={yourTitle}
+                  companyWebsite={companyWebsite}
+                  email={email}
+                  phone={phone}
+                />
+              </Box>
+            </PDFExport>
           </Grid>
         </Grid>
       </Container>

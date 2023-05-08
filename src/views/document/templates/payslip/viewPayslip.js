@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import PaySlip from "./paySlip";
+import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
+import { useRef } from "react";
 
 export default function ViewPaySlip() {
   const [yourCompany, SetYourCompany] = useState("Your Company Name");
@@ -41,6 +43,14 @@ export default function ViewPaySlip() {
   const [companyWebsite, SetCompanyWebsite] = useState("www.yourwebsite.com");
   const [email, SetEmail] = useState("urmail@gmail.com");
   const [phone, SetPhone] = useState("+89 5810 2132");
+
+  const pdfExportComponent = useRef(null);
+
+  const exportPDFWithComponent = () => {
+    if (pdfExportComponent.current) {
+      pdfExportComponent.current.save();
+    }
+  };
 
   return (
     <>
@@ -289,6 +299,7 @@ export default function ViewPaySlip() {
                   mx={2}
                   variant="contained"
                   sx={{ borderRadius: 2, px: 2, ml: 5 }}
+                  onClick={exportPDFWithComponent}
                 >
                   Download
                 </Button>
@@ -307,35 +318,42 @@ export default function ViewPaySlip() {
               Preview
             </Typography>
             <Divider />
-            <Box
-              sx={{
-                boxShadow: "2px 2px 20px  rgba(0,0,0,0.1)",
-                borderRadius: 5,
-              }}
+            <PDFExport
+              ref={pdfExportComponent}
+              scale={0.8}
+              paperSize="A4"
+              margin="0.5cm"
             >
-              <PaySlip
-                yourCompany={yourCompany}
-                yourAddress={yourAddress}
-                todayDate={todayDate}
-                empName={empName}
-                designation={designation}
-                payPeriod={payPeriod}
-                workedDays={workedDays}
-                basic={basic}
-                insentive={insentive}
-                rent={rent}
-                meal={meal}
-                fund={fund}
-                tax={tax}
-                loan={loan}
-                totalEarnings={totalEarnings}
-                totalDeductions={totalDeductions}
-                netPay={netPay}
-                companyWebsite={companyWebsite}
-                email={email}
-                phone={phone}
-              />
-            </Box>
+              <Box
+                sx={{
+                  boxShadow: "2px 2px 20px  rgba(0,0,0,0.1)",
+                  borderRadius: 5,
+                }}
+              >
+                <PaySlip
+                  yourCompany={yourCompany}
+                  yourAddress={yourAddress}
+                  todayDate={todayDate}
+                  empName={empName}
+                  designation={designation}
+                  payPeriod={payPeriod}
+                  workedDays={workedDays}
+                  basic={basic}
+                  insentive={insentive}
+                  rent={rent}
+                  meal={meal}
+                  fund={fund}
+                  tax={tax}
+                  loan={loan}
+                  totalEarnings={totalEarnings}
+                  totalDeductions={totalDeductions}
+                  netPay={netPay}
+                  companyWebsite={companyWebsite}
+                  email={email}
+                  phone={phone}
+                />
+              </Box>
+            </PDFExport>
           </Grid>
         </Grid>
       </Container>
