@@ -140,7 +140,15 @@ export default function Documemnts() {
         </Typography>
         <Grid container display={"flex"} justifyContent={"center"} my={1}>
           <Grid item xl={2.5} md={2.5} mx={3} my={5}>
-            <Card sx={{ borderRadius: 5 }}>
+            <Card
+              sx={{
+                borderRadius: 5,
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
               <CardActionArea>
                 <CardMedia
                   component="img"
@@ -181,7 +189,15 @@ export default function Documemnts() {
           </Grid>
 
           <Grid item xl={2.5} md={2.5} mx={3} my={5}>
-            <Card sx={{ borderRadius: 5 }}>
+            <Card
+              sx={{
+                borderRadius: 5,
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
               <CardActionArea>
                 <CardMedia
                   component="img"
