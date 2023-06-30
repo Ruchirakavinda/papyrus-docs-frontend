@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import ResponsiveAppBar from "./common/navBar";
 import Dashboard from "./views/dashborad/dashboard";
@@ -23,12 +23,9 @@ function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/employees" element={<Employees />} />
           <Route path="/business_letter" element={<CreateBusinessLetter />} />
-          <Route
-            path="/business_letter/preview"
-            element={<ViewBusinessLetter />}
-          />
+          <Route path="/business_letter/:id" element={<ViewBusinessLetter />} />
           <Route path="/payslip" element={<CreatePaySlip />} />
-          <Route path="/payslip/preview" element={<ViewPaySlip />} />
+          <Route path="/payslip/:id" element={<ViewPaySlip />} />
         </Routes>
         <Footer />
       </BrowserRouter>

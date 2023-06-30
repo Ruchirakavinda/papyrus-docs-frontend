@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Button,
@@ -11,36 +10,58 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import BusinessLetter from "./businessLetter";
-import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
+import { PDFExport } from "@progress/kendo-react-pdf";
 import { useRef } from "react";
+import {
+  getBusLetterById,
+  updateBusLetterById,
+} from "../../../../api-services/docService/businessLetterService";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ViewBusinessLetter() {
-  const [yourCompany, SetYourCompany] = useState("Your Company Name");
-  const [yourAddress, SetYourAddress] = useState(
-    "No 27, Prasannapura, Pitipana South, Homagama."
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [busLetter, setBusLetter] = useState([]);
+
+  async function getTheBusLetterById() {
+    const response = await getBusLetterById();
+
+    if (response !== null) {
+      setBusLetter(response);
+    } else {
+      console.log("Letter : " + response);
+    }
+  }
+
+  useEffect(() => {
+    getTheBusLetterById();
+  }, []);
+
+  const [yourCompany, SetYourCompany] = useState(busLetter.companyName);
+  const [yourAddress, SetYourAddress] = useState(busLetter.yourAddress);
+  const [todayDate, SetTodayDate] = useState(busLetter.todayDate);
+  const [addresseeName, SetAddresseeName] = useState(busLetter.addresseeName);
+  const [addresseeTitle, SetAddresseeTitle] = useState(
+    busLetter.addresseeTitle
   );
-  const [todayDate, SetTodayDate] = useState("12th January 2030");
-  const [addresseeName, SetAddresseeName] = useState(" Addressee Name");
-  const [addresseeTitle, SetAddresseeTitle] = useState("Addressee Title");
-  const [addresseeCompany, SetAddresseeCompany] = useState("Addressee Company");
+  const [addresseeCompany, SetAddresseeCompany] = useState(
+    busLetter.addresseeCompany
+  );
   const [companyAddress, SetCompanyAddress] = useState(
-    "No 27, Prasannapura, Pitipana South, Homagama."
+    busLetter.companyAddress
   );
-  const [salutation, SetSalutation] = useState(" Dear Salutation,");
-  const [body1, SetBody1] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor inreprehenderit in voluptate velit esse cillum dolore eu fugia nulla pariatur. Excepteur sint occaecat cupidatat non proident,sunt in culpa qui officia deserunt mollit anim id est laborum."
+  const [salutation, SetSalutation] = useState(busLetter.salutation);
+  const [body1, SetBody1] = useState(busLetter.body1);
+  const [body2, SetBody2] = useState(busLetter.body2);
+  const [body3, SetBody3] = useState(busLetter.body3);
+  const [yourName, SetYourName] = useState(busLetter.yourName);
+  const [companyWebsite, SetCompanyWebsite] = useState(
+    busLetter.companyWebsite
   );
-  const [body2, SetBody2] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor inreprehenderit in voluptate velit esse cillum dolore eu fugia nulla pariatur. Excepteur sint occaecat cupidatat non proident,sunt in culpa qui officia deserunt mollit anim id est laborum."
-  );
-  const [body3, SetBody3] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor inreprehenderit in voluptate velit esse cillum dolore eu fugia nulla pariatur. Excepteur sint occaecat cupidatat non proident,sunt in culpa qui officia deserunt mollit anim id est laborum."
-  );
-  const [yourName, SetYourName] = useState("Your Full Name");
-  const [yourTitle, SetYourTitle] = useState("Your Title");
-  const [companyWebsite, SetCompanyWebsite] = useState("www.yourwebsite.com");
-  const [email, SetEmail] = useState("urmail@gmail.com");
-  const [phone, SetPhone] = useState("+89 5810 2132");
+  const [email, SetEmail] = useState(busLetter.email);
+  const [phone, SetPhone] = useState(busLetter.phone);
 
   const pdfExportComponent = useRef(null);
 
@@ -49,6 +70,35 @@ export default function ViewBusinessLetter() {
       pdfExportComponent.current.save();
     }
   };
+
+  const busLetterObj = {
+    templateType: "business-letter",
+    companyName: yourCompany,
+    yourAddress: yourAddress,
+    todayDate: todayDate,
+    addresseeName: addresseeName,
+    addresseeTitle: addresseeTitle,
+    addresseeCompany: addresseeCompany,
+    companyAddress: companyAddress,
+    salutation: salutation,
+    body1: body1,
+    body2: body2,
+    body3: body3,
+    yourName: yourName,
+    companyWebsite: companyWebsite,
+    email: email,
+    phone: phone,
+  };
+
+  async function updateBusLetter() {
+    const response = await updateBusLetterById(id, busLetterObj);
+    if (response === "ok") {
+      console.log("updated Successfully");
+      navigate("/documents");
+    } else {
+      console.log("update failed");
+    }
+  }
 
   return (
     <>
@@ -216,15 +266,6 @@ export default function ViewBusinessLetter() {
                 sx={{ my: 1 }}
                 onChange={(e) => SetYourName(e.target.value)}
               />
-              <TextField
-                type="text"
-                label="Your title"
-                id="outlined-size-small"
-                size="small"
-                fullWidth
-                sx={{ my: 1 }}
-                onChange={(e) => SetYourTitle(e.target.value)}
-              />
 
               <Typography
                 gutterBottom
@@ -236,7 +277,7 @@ export default function ViewBusinessLetter() {
               </Typography>
               <TextField
                 type="text"
-                label="Your Company Eebsite"
+                label="Your Company Website"
                 id="outlined-size-small"
                 size="small"
                 fullWidth
@@ -281,6 +322,7 @@ export default function ViewBusinessLetter() {
                   mx={2}
                   variant="contained"
                   sx={{ borderRadius: 2, px: 2, ml: 5 }}
+                  onClick={updateBusLetter}
                 >
                   Save Changes
                 </Button>
@@ -309,6 +351,7 @@ export default function ViewBusinessLetter() {
             <Divider />
             <PDFExport
               ref={pdfExportComponent}
+              fileName={"Bussines Letter - " + yourCompany + " - " + todayDate}
               scale={0.8}
               paperSize="A4"
               margin="0.5cm"
@@ -332,7 +375,6 @@ export default function ViewBusinessLetter() {
                   body2={body2}
                   body3={body3}
                   yourName={yourName}
-                  yourTitle={yourTitle}
                   companyWebsite={companyWebsite}
                   email={email}
                   phone={phone}
