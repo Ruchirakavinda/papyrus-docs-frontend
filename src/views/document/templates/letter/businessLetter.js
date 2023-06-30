@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import * as React from "react";
 import letterhead from "../../../../assests/letterhead.png";
 import letterfoot from "../../../../assests/letterfoot.png";
@@ -10,7 +10,12 @@ export default function BusinessLetter(props) {
     <>
       <Grid Container sx={{ p: 0 }}>
         <Box sx={{ width: "100%" }}>
-          <img src={letterhead} width="100%" style={{ borderRadius: "20px" }} />
+          <img
+            src={letterhead}
+            width="100%"
+            alt="letter head"
+            style={{ borderRadius: "20px" }}
+          />
         </Box>
         <Box py={2} px={5} mt={-10}>
           <Box width="30%">
@@ -91,14 +96,6 @@ export default function BusinessLetter(props) {
             >
               {props.yourName}
             </Typography>
-            <Typography
-              py={0.2}
-              color="black"
-              fontWeight="bold"
-              fontSize={Fsize}
-            >
-              {props.yourTitle}
-            </Typography>
           </Box>
 
           <Box
@@ -133,7 +130,12 @@ export default function BusinessLetter(props) {
         </Box>
 
         <Box>
-          <img src={letterfoot} width="100%" style={{ borderRadius: "20px" }} />
+          <img
+            src={letterfoot}
+            alt="letter footer"
+            width="100%"
+            style={{ borderRadius: "20px" }}
+          />
         </Box>
       </Grid>
     </>

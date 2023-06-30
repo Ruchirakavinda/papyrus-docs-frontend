@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Button,
@@ -11,7 +10,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import PaySlip from "./paySlip";
-import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
+import { PDFExport } from "@progress/kendo-react-pdf";
 import { useRef } from "react";
 
 export default function ViewPaySlip() {
@@ -247,7 +246,7 @@ export default function ViewPaySlip() {
               </Typography>
               <TextField
                 type="text"
-                label="Your Company Eebsite"
+                label="Your Company Website"
                 id="outlined-size-small"
                 size="small"
                 fullWidth
@@ -320,6 +319,7 @@ export default function ViewPaySlip() {
             <Divider />
             <PDFExport
               ref={pdfExportComponent}
+              fileName={"Payslip - " + payPeriod + " - " + empName}
               scale={0.8}
               paperSize="A4"
               margin="0.5cm"

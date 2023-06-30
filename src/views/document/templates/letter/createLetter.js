@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Button,
@@ -11,8 +10,10 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import BusinessLetter from "./businessLetter";
-import { PDFExport, savePDF } from "@progress/kendo-react-pdf";
+import { PDFExport } from "@progress/kendo-react-pdf";
 import { useRef } from "react";
+import { addNewLetter } from "../../../../api-services/docService/businessLetterService";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateBusinessLetter() {
   const [yourCompany, SetYourCompany] = useState("Your Company Name");
@@ -37,10 +38,10 @@ export default function CreateBusinessLetter() {
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor inreprehenderit in voluptate velit esse cillum dolore eu fugia nulla pariatur. Excepteur sint occaecat cupidatat non proident,sunt in culpa qui officia deserunt mollit anim id est laborum."
   );
   const [yourName, SetYourName] = useState("Your Full Name");
-  const [yourTitle, SetYourTitle] = useState("Your Title");
   const [companyWebsite, SetCompanyWebsite] = useState("www.yourwebsite.com");
   const [email, SetEmail] = useState("urmail@gmail.com");
   const [phone, SetPhone] = useState("+89 5810 2132");
+  const navigate = useNavigate();
 
   const pdfExportComponent = useRef(null);
 
@@ -49,6 +50,35 @@ export default function CreateBusinessLetter() {
       pdfExportComponent.current.save();
     }
   };
+
+  const busLetterObj = {
+    templateType: "business-letter",
+    companyName: yourCompany,
+    yourAddress: yourAddress,
+    todayDate: todayDate,
+    addresseeName: addresseeName,
+    addresseeTitle: addresseeTitle,
+    addresseeCompany: addresseeCompany,
+    companyAddress: companyAddress,
+    salutation: salutation,
+    body1: body1,
+    body2: body2,
+    body3: body3,
+    yourName: yourName,
+    companyWebsite: companyWebsite,
+    email: email,
+    phone: phone,
+  };
+
+  async function createBusLetter() {
+    const response = await addNewLetter(busLetterObj);
+    if (response === "ok") {
+      console.log("Business Letter created Successfully");
+      navigate("/documents");
+    } else {
+      console.log("Business Letter creation failed");
+    }
+  }
 
   return (
     <>
@@ -216,15 +246,6 @@ export default function CreateBusinessLetter() {
                 sx={{ my: 1 }}
                 onChange={(e) => SetYourName(e.target.value)}
               />
-              <TextField
-                type="text"
-                label="Your title"
-                id="outlined-size-small"
-                size="small"
-                fullWidth
-                sx={{ my: 1 }}
-                onChange={(e) => SetYourTitle(e.target.value)}
-              />
 
               <Typography
                 gutterBottom
@@ -236,7 +257,7 @@ export default function CreateBusinessLetter() {
               </Typography>
               <TextField
                 type="text"
-                label="Your Company Eebsite"
+                label="Your Company Website"
                 id="outlined-size-small"
                 size="small"
                 fullWidth
@@ -281,6 +302,7 @@ export default function CreateBusinessLetter() {
                   mx={2}
                   variant="contained"
                   sx={{ borderRadius: 2, px: 2, ml: 5 }}
+                  onClick={createBusLetter}
                 >
                   Create
                 </Button>
@@ -310,6 +332,7 @@ export default function CreateBusinessLetter() {
 
             <PDFExport
               ref={pdfExportComponent}
+              fileName={"Bussines Letter - " + yourCompany + " - " + todayDate}
               scale={0.8}
               paperSize="A4"
               margin="0.5cm"
@@ -333,7 +356,6 @@ export default function CreateBusinessLetter() {
                   body2={body2}
                   body3={body3}
                   yourName={yourName}
-                  yourTitle={yourTitle}
                   companyWebsite={companyWebsite}
                   email={email}
                   phone={phone}

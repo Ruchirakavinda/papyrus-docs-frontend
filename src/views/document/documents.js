@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Button,
@@ -16,57 +15,92 @@ import {
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import doc from "../../assests/doc.png";
+import {
+  getAllBusLetters,
+  removeBusLetterById,
+} from "../../api-services/docService/businessLetterService";
+import { useEffect } from "react";
+import { useState } from "react";
 
 export default function Documemnts() {
-  const theme = useTheme();
+  const [busLetters, setBusLetters] = useState([]);
 
-  const companyLetter = (
-    <Grid item xs={12} md={3} lg={2} xl={2} m={2}>
-      <Card sx={{ borderRadius: 5 }}>
-        <Box display="flex" flexDirection="column" alignItems="center" p={2}>
-          <Box
-            display="flex"
-            flexDirection="row"
-            justifyContent="end"
-            alignItems="end"
-            sx={{ width: "100%" }}
-          >
-            <DeleteIcon
-              color="error"
-              fontSize="medium"
-              sx={{ cursor: "pointer", mb: -2, mr: -1 }}
+  async function getTheBusLetters() {
+    const response = await getAllBusLetters();
+
+    if (response !== null) {
+      setBusLetters(response);
+    } else {
+      console.log("All letters : " + response);
+    }
+  }
+
+  useEffect(() => {
+    getTheBusLetters();
+  }, []);
+
+  async function deleteBusLetter(id) {
+    const response = await removeBusLetterById(id);
+
+    if (response === "ok") {
+      getTheBusLetters();
+      console.log("Business letter deleted Successfully");
+    } else {
+      console.log("Business letter deleted failed");
+      console.log(response);
+    }
+  }
+
+  const companyLetters = busLetters.map((bus) => {
+    return (
+      <Grid item xs={12} md={3} lg={2} xl={2} m={2} key={bus.id}>
+        <Card sx={{ borderRadius: 5 }}>
+          <Box display="flex" flexDirection="column" alignItems="center" p={2}>
+            <Box
+              display="flex"
+              flexDirection="row"
+              justifyContent="end"
+              alignItems="end"
+              sx={{ width: "100%" }}
+            >
+              <DeleteIcon
+                color="error"
+                fontSize="medium"
+                sx={{ cursor: "pointer", mb: -2, mr: -1 }}
+                onClick={deleteBusLetter(bus.id)}
+              />
+            </Box>
+            <CardMedia
+              component="img"
+              sx={{ width: "100%" }}
+              image={doc}
+              alt="Live from space album cover"
             />
-          </Box>
-          <CardMedia
-            component="img"
-            sx={{ width: "100%" }}
-            image={doc}
-            alt="Live from space album cover"
-          />
-          <Typography variant="text" mb={2}>
-            SamplName.pdf
-          </Typography>
+            <Typography variant="text" mb={2}>
+              {"Bussines Letter - " + bus.companyName + " - " + bus.todayDate}
+            </Typography>
 
-          <Button
-            variant="outlined"
-            size="small"
-            sx={{ borderRadius: 2, px: 2, fontSize: 12 }}
-          >
-            Download
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            sx={{ borderRadius: 2, px: 2, fontSize: 12, my: 2 }}
-            component="a"
-            href="/business_letter/preview"
-          >
-            View & Edit
-          </Button>
-        </Box>
-      </Card>
-    </Grid>
-  );
+            {/* <Button
+              variant="outlined"
+              size="small"
+              sx={{ borderRadius: 2, px: 2, fontSize: 12 }}
+            >
+              Download
+            </Button> */}
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ borderRadius: 2, px: 2, fontSize: 12, my: 2 }}
+              component="a"
+              href={`/business_letter/${bus.id}`}
+            >
+              View & Edit
+            </Button>
+          </Box>
+        </Card>
+      </Grid>
+    );
+  });
 
   const payslips = (
     <Grid item xs={12} md={3} lg={2} xl={2} m={2}>
@@ -95,19 +129,19 @@ export default function Documemnts() {
             SamplName.pdf
           </Typography>
 
-          <Button
+          {/* <Button
             variant="outlined"
             size="small"
             sx={{ borderRadius: 2, px: 2, fontSize: 12 }}
           >
             Download
-          </Button>
+          </Button> */}
           <Button
             variant="contained"
             size="small"
             sx={{ borderRadius: 2, px: 2, fontSize: 12, my: 2 }}
             component="a"
-            href="/payslip/preview"
+            href="/payslip/:id"
           >
             View & Edit
           </Button>
@@ -259,12 +293,8 @@ export default function Documemnts() {
         >
           Business Letters
         </Typography>
-        <Grid container display="flex" justifyContent="space-between" my={2}>
-          {companyLetter}
-          {companyLetter}
-          {companyLetter}
-          {companyLetter}
-          {companyLetter}
+        <Grid container display="flex" justifyContent="start" my={2}>
+          {companyLetters}
         </Grid>
 
         <Divider />
@@ -278,7 +308,7 @@ export default function Documemnts() {
         >
           Payslips
         </Typography>
-        <Grid container display="flex" justifyContent="space-between" my={2}>
+        <Grid container display="flex" justifyContent="start" my={2}>
           {payslips}
           {payslips}
           {payslips}
