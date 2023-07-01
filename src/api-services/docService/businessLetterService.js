@@ -47,16 +47,21 @@ export async function getAllBusLetters() {
 }
 
 export async function getBusLetterById(id) {
-  const response = await fetch(BASE_URL + "/business-letter/" + id, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  console.log("Fetching details :", response);
-  if (response.ok) {
-    return response.json();
-  } else {
-    return response.status(500).send({ error: "Error loading list" });
+  try {
+    const response = await fetch(BASE_URL + "/business-letter/" + id, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      return response.json();
+    } else {
+      return response.status(500).send({ error: "Error loading list" });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
   }
 }
 

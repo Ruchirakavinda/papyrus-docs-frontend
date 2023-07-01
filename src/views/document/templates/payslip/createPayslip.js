@@ -12,36 +12,38 @@ import { useState } from "react";
 import PaySlip from "./paySlip";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import { useRef } from "react";
+import { addNewpaySlip } from "../../../../api-services/docService/payslipService";
+import { useNavigate } from "react-router-dom";
 
 export default function CreatePaySlip() {
-  const [yourCompany, SetYourCompany] = useState("Your Company Name");
-  const [yourAddress, SetYourAddress] = useState(
-    "No 27, Prasannapura, Pitipana South, Homagama."
-  );
-  const [todayDate, SetTodayDate] = useState("12th January 2030");
+  const navigate = useNavigate();
 
-  const [empName, setEmpName] = useState("Sample Employee");
-  const [designation, setDesignation] = useState("Software Engineer");
-  const [payPeriod, setPayperiod] = useState("August 2023");
-  const [workedDays, setWorkedDyas] = useState("20");
+  const [yourCompany, SetYourCompany] = useState("");
+  const [yourAddress, SetYourAddress] = useState("");
+  const [todayDate, SetTodayDate] = useState("");
 
-  const [basic, setBasic] = useState(550);
-  const [insentive, setInsntive] = useState(20);
-  const [rent, setRent] = useState(50);
-  const [meal, setMeal] = useState(30);
+  const [empName, setEmpName] = useState("");
+  const [designation, setDesignation] = useState("");
+  const [payPeriod, setPayperiod] = useState("");
+  const [workedDays, setWorkedDyas] = useState("");
 
-  const [fund, setFund] = useState(10);
-  const [tax, setTax] = useState(10);
-  const [loan, setLoan] = useState(20);
+  const [basic, setBasic] = useState(0);
+  const [insentive, setInsntive] = useState(0);
+  const [rent, setRent] = useState(0);
+  const [meal, setMeal] = useState(0);
+
+  const [fund, setFund] = useState(0);
+  const [tax, setTax] = useState(0);
+  const [loan, setLoan] = useState(0);
 
   const totalEarnings =
     parseInt(basic) + parseInt(insentive) + parseInt(rent) + parseInt(meal);
   const totalDeductions = parseInt(fund) + parseInt(tax) + parseInt(loan);
   const netPay = totalEarnings - totalDeductions;
 
-  const [companyWebsite, SetCompanyWebsite] = useState("www.yourwebsite.com");
-  const [email, SetEmail] = useState("urmail@gmail.com");
-  const [phone, SetPhone] = useState("+89 5810 2132");
+  const [companyWebsite, SetCompanyWebsite] = useState("");
+  const [email, SetEmail] = useState("");
+  const [phone, SetPhone] = useState("");
 
   const pdfExportComponent = useRef(null);
 
@@ -50,6 +52,37 @@ export default function CreatePaySlip() {
       pdfExportComponent.current.save();
     }
   };
+
+  const payslipObj = {
+    templateType: "payslip",
+    companyName: yourCompany,
+    yourAddress: yourAddress,
+    todayDate: todayDate,
+    employeeName: empName,
+    designation: designation,
+    payPeriod: payPeriod,
+    workedDays: workedDays,
+    basic: basic,
+    incetivePay: insentive,
+    houseRentAllowance: rent,
+    mealAllowance: meal,
+    providentFund: fund,
+    professionalTax: tax,
+    loan: loan,
+    companyWebsite: companyWebsite,
+    email: email,
+    phone: phone,
+  };
+
+  async function createPaySlip() {
+    const response = await addNewpaySlip(payslipObj);
+    if (response === "ok") {
+      console.log("Payslip created Successfully");
+      navigate("/documents");
+    } else {
+      console.log("Payslip creation failed");
+    }
+  }
 
   return (
     <>
@@ -291,6 +324,7 @@ export default function CreatePaySlip() {
                   mx={2}
                   variant="contained"
                   sx={{ borderRadius: 2, px: 2, ml: 5 }}
+                  onClick={createPaySlip}
                 >
                   Create
                 </Button>
