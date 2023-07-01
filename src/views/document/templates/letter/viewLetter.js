@@ -23,45 +23,48 @@ export default function ViewBusinessLetter() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [busLetter, setBusLetter] = useState([]);
-
-  async function getTheBusLetterById() {
-    const response = await getBusLetterById();
-
-    if (response !== null) {
-      setBusLetter(response);
-    } else {
-      console.log("Letter : " + response);
-    }
-  }
+  const [yourCompany, SetYourCompany] = useState("");
+  const [yourAddress, SetYourAddress] = useState("");
+  const [todayDate, SetTodayDate] = useState("");
+  const [addresseeName, SetAddresseeName] = useState("");
+  const [addresseeTitle, SetAddresseeTitle] = useState("");
+  const [addresseeCompany, SetAddresseeCompany] = useState("");
+  const [companyAddress, SetCompanyAddress] = useState("");
+  const [salutation, SetSalutation] = useState("");
+  const [body1, SetBody1] = useState("");
+  const [body2, SetBody2] = useState("");
+  const [body3, SetBody3] = useState("");
+  const [yourName, SetYourName] = useState("");
+  const [companyWebsite, SetCompanyWebsite] = useState("");
+  const [email, SetEmail] = useState("");
+  const [phone, SetPhone] = useState("");
 
   useEffect(() => {
+    async function getTheBusLetterById() {
+      const response = await getBusLetterById(id);
+      console.log("Letter : " + response);
+      if (response !== null) {
+        SetYourCompany(response.companyName);
+        SetYourAddress(response.yourAddress);
+        SetTodayDate(response.todayDate);
+        SetAddresseeName(response.addresseeName);
+        SetAddresseeTitle(response.addresseeTitle);
+        SetAddresseeCompany(response.addresseeCompany);
+        SetCompanyAddress(response.companyAddress);
+        SetSalutation(response.salutation);
+        SetBody1(response.body1);
+        SetBody2(response.body2);
+        SetBody3(response.body3);
+        SetYourName(response.yourName);
+        SetCompanyWebsite(response.companyWebsite);
+        SetEmail(response.email);
+        SetPhone(response.phone);
+      } else {
+        console.log(response);
+      }
+    }
     getTheBusLetterById();
   }, []);
-
-  const [yourCompany, SetYourCompany] = useState(busLetter.companyName);
-  const [yourAddress, SetYourAddress] = useState(busLetter.yourAddress);
-  const [todayDate, SetTodayDate] = useState(busLetter.todayDate);
-  const [addresseeName, SetAddresseeName] = useState(busLetter.addresseeName);
-  const [addresseeTitle, SetAddresseeTitle] = useState(
-    busLetter.addresseeTitle
-  );
-  const [addresseeCompany, SetAddresseeCompany] = useState(
-    busLetter.addresseeCompany
-  );
-  const [companyAddress, SetCompanyAddress] = useState(
-    busLetter.companyAddress
-  );
-  const [salutation, SetSalutation] = useState(busLetter.salutation);
-  const [body1, SetBody1] = useState(busLetter.body1);
-  const [body2, SetBody2] = useState(busLetter.body2);
-  const [body3, SetBody3] = useState(busLetter.body3);
-  const [yourName, SetYourName] = useState(busLetter.yourName);
-  const [companyWebsite, SetCompanyWebsite] = useState(
-    busLetter.companyWebsite
-  );
-  const [email, SetEmail] = useState(busLetter.email);
-  const [phone, SetPhone] = useState(busLetter.phone);
 
   const pdfExportComponent = useRef(null);
 
@@ -132,6 +135,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetYourCompany(e.target.value)}
+                value={yourCompany}
               />
               <TextField
                 type="text"
@@ -141,6 +145,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetYourAddress(e.target.value)}
+                value={yourAddress}
               />
               <TextField
                 type="text"
@@ -150,6 +155,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetTodayDate(e.target.value)}
+                value={todayDate}
               />
 
               <Typography
@@ -169,6 +175,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetAddresseeName(e.target.value)}
+                value={addresseeName}
               />
               <TextField
                 type="text"
@@ -178,6 +185,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetAddresseeTitle(e.target.value)}
+                value={addresseeTitle}
               />
               <TextField
                 type="text"
@@ -187,6 +195,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetAddresseeCompany(e.target.value)}
+                value={addresseeCompany}
               />
               <TextField
                 type="text"
@@ -196,6 +205,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetCompanyAddress(e.target.value)}
+                value={companyAddress}
               />
 
               <Typography
@@ -214,6 +224,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetSalutation(e.target.value)}
+                value={salutation}
               />
               <TextField
                 type="text"
@@ -225,6 +236,7 @@ export default function ViewBusinessLetter() {
                 rows={4}
                 sx={{ my: 1 }}
                 onChange={(e) => SetBody1(e.target.value)}
+                value={body1}
               />
               <TextField
                 type="text"
@@ -236,6 +248,7 @@ export default function ViewBusinessLetter() {
                 rows={2}
                 sx={{ my: 1 }}
                 onChange={(e) => SetBody2(e.target.value)}
+                value={body2}
               />
               <TextField
                 type="text"
@@ -247,6 +260,7 @@ export default function ViewBusinessLetter() {
                 rows={2}
                 sx={{ my: 1 }}
                 onChange={(e) => SetBody3(e.target.value)}
+                value={body3}
               />
 
               <Typography
@@ -265,6 +279,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetYourName(e.target.value)}
+                value={yourName}
               />
 
               <Typography
@@ -283,6 +298,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetCompanyWebsite(e.target.value)}
+                value={companyWebsite}
               />
               <TextField
                 type="email"
@@ -292,6 +308,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetEmail(e.target.value)}
+                value={email}
               />
               <TextField
                 type="text"
@@ -301,6 +318,7 @@ export default function ViewBusinessLetter() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetPhone(e.target.value)}
+                value={phone}
               />
 
               <Box

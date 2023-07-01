@@ -16,31 +16,21 @@ import { addNewLetter } from "../../../../api-services/docService/businessLetter
 import { useNavigate } from "react-router-dom";
 
 export default function CreateBusinessLetter() {
-  const [yourCompany, SetYourCompany] = useState("Your Company Name");
-  const [yourAddress, SetYourAddress] = useState(
-    "No 27, Prasannapura, Pitipana South, Homagama."
-  );
-  const [todayDate, SetTodayDate] = useState("12th January 2030");
-  const [addresseeName, SetAddresseeName] = useState(" Addressee Name");
-  const [addresseeTitle, SetAddresseeTitle] = useState("Addressee Title");
-  const [addresseeCompany, SetAddresseeCompany] = useState("Addressee Company");
-  const [companyAddress, SetCompanyAddress] = useState(
-    "No 27, Prasannapura, Pitipana South, Homagama."
-  );
-  const [salutation, SetSalutation] = useState(" Dear Salutation,");
-  const [body1, SetBody1] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor inreprehenderit in voluptate velit esse cillum dolore eu fugia nulla pariatur. Excepteur sint occaecat cupidatat non proident,sunt in culpa qui officia deserunt mollit anim id est laborum."
-  );
-  const [body2, SetBody2] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor inreprehenderit in voluptate velit esse cillum dolore eu fugia nulla pariatur. Excepteur sint occaecat cupidatat non proident,sunt in culpa qui officia deserunt mollit anim id est laborum."
-  );
-  const [body3, SetBody3] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor inreprehenderit in voluptate velit esse cillum dolore eu fugia nulla pariatur. Excepteur sint occaecat cupidatat non proident,sunt in culpa qui officia deserunt mollit anim id est laborum."
-  );
-  const [yourName, SetYourName] = useState("Your Full Name");
-  const [companyWebsite, SetCompanyWebsite] = useState("www.yourwebsite.com");
-  const [email, SetEmail] = useState("urmail@gmail.com");
-  const [phone, SetPhone] = useState("+89 5810 2132");
+  const [yourCompany, SetYourCompany] = useState("");
+  const [yourAddress, SetYourAddress] = useState("");
+  const [todayDate, SetTodayDate] = useState("");
+  const [addresseeName, SetAddresseeName] = useState("");
+  const [addresseeTitle, SetAddresseeTitle] = useState("");
+  const [addresseeCompany, SetAddresseeCompany] = useState("");
+  const [companyAddress, SetCompanyAddress] = useState("");
+  const [salutation, SetSalutation] = useState("");
+  const [body1, SetBody1] = useState("");
+  const [body2, SetBody2] = useState("");
+  const [body3, SetBody3] = useState("");
+  const [yourName, SetYourName] = useState("");
+  const [companyWebsite, SetCompanyWebsite] = useState("");
+  const [email, SetEmail] = useState("");
+  const [phone, SetPhone] = useState("");
   const navigate = useNavigate();
 
   const pdfExportComponent = useRef(null);

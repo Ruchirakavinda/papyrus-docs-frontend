@@ -12,36 +12,43 @@ import { useState } from "react";
 import PaySlip from "./paySlip";
 import { PDFExport } from "@progress/kendo-react-pdf";
 import { useRef } from "react";
+import { useEffect } from "react";
+import {
+  getPayslipById,
+  updatePayslipById,
+} from "../../../../api-services/docService/payslipService";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ViewPaySlip() {
-  const [yourCompany, SetYourCompany] = useState("Your Company Name");
-  const [yourAddress, SetYourAddress] = useState(
-    "No 27, Prasannapura, Pitipana South, Homagama."
-  );
-  const [todayDate, SetTodayDate] = useState("12th January 2030");
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  const [empName, setEmpName] = useState("Sample Employee");
-  const [designation, setDesignation] = useState("Software Engineer");
-  const [payPeriod, setPayperiod] = useState("August 2023");
-  const [workedDays, setWorkedDyas] = useState("20");
+  const [yourCompany, SetYourCompany] = useState("");
+  const [yourAddress, SetYourAddress] = useState("");
+  const [todayDate, SetTodayDate] = useState("");
 
-  const [basic, setBasic] = useState(550);
-  const [insentive, setInsntive] = useState(20);
-  const [rent, setRent] = useState(50);
-  const [meal, setMeal] = useState(30);
+  const [empName, setEmpName] = useState("");
+  const [designation, setDesignation] = useState("");
+  const [payPeriod, setPayperiod] = useState("");
+  const [workedDays, setWorkedDyas] = useState("");
 
-  const [fund, setFund] = useState(10);
-  const [tax, setTax] = useState(10);
-  const [loan, setLoan] = useState(20);
+  const [basic, setBasic] = useState(0);
+  const [insentive, setInsntive] = useState(0);
+  const [rent, setRent] = useState(0);
+  const [meal, setMeal] = useState(0);
+
+  const [fund, setFund] = useState(0);
+  const [tax, setTax] = useState(0);
+  const [loan, setLoan] = useState(0);
 
   const totalEarnings =
     parseInt(basic) + parseInt(insentive) + parseInt(rent) + parseInt(meal);
   const totalDeductions = parseInt(fund) + parseInt(tax) + parseInt(loan);
   const netPay = totalEarnings - totalDeductions;
 
-  const [companyWebsite, SetCompanyWebsite] = useState("www.yourwebsite.com");
-  const [email, SetEmail] = useState("urmail@gmail.com");
-  const [phone, SetPhone] = useState("+89 5810 2132");
+  const [companyWebsite, SetCompanyWebsite] = useState("");
+  const [email, SetEmail] = useState("");
+  const [phone, SetPhone] = useState("");
 
   const pdfExportComponent = useRef(null);
 
@@ -51,6 +58,65 @@ export default function ViewPaySlip() {
     }
   };
 
+  useEffect(() => {
+    async function getThePayslipById() {
+      const response = await getPayslipById(id);
+      console.log("Payslip : " + response);
+      if (response !== null) {
+        SetYourCompany(response.companyName);
+        SetYourAddress(response.yourAddress);
+        SetTodayDate(response.todayDate);
+        setEmpName(response.employeeName);
+        setDesignation(response.designation);
+        setPayperiod(response.payPeriod);
+        setWorkedDyas(response.workedDays);
+        setBasic(response.basic);
+        setInsntive(response.incetivePay);
+        setRent(response.houseRentAllowance);
+        setMeal(response.mealAllowance);
+        setFund(response.providentFund);
+        setTax(response.professionalTax);
+        setLoan(response.loan);
+        SetCompanyWebsite(response.companyWebsite);
+        SetEmail(response.email);
+        SetPhone(response.phone);
+      } else {
+        console.log(response);
+      }
+    }
+    getThePayslipById();
+  }, []);
+
+  const payslipObj = {
+    templateType: "payslip",
+    companyName: yourCompany,
+    yourAddress: yourAddress,
+    todayDate: todayDate,
+    employeeName: empName,
+    designation: designation,
+    payPeriod: payPeriod,
+    workedDays: workedDays,
+    basic: basic,
+    incetivePay: insentive,
+    houseRentAllowance: rent,
+    mealAllowance: meal,
+    providentFund: fund,
+    professionalTax: tax,
+    loan: loan,
+    companyWebsite: companyWebsite,
+    email: email,
+    phone: phone,
+  };
+
+  async function updatePayslip() {
+    const response = await updatePayslipById(id, payslipObj);
+    if (response === "ok") {
+      console.log("updated Successfully");
+      navigate("/documents");
+    } else {
+      console.log("update failed");
+    }
+  }
   return (
     <>
       <Container maxWidth="xl">
@@ -83,6 +149,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetYourCompany(e.target.value)}
+                value={yourCompany}
               />
               <TextField
                 type="text"
@@ -92,6 +159,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetYourAddress(e.target.value)}
+                value={yourAddress}
               />
               <TextField
                 type="text"
@@ -101,6 +169,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetTodayDate(e.target.value)}
+                value={todayDate}
               />
 
               <Typography
@@ -120,6 +189,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setEmpName(e.target.value)}
+                value={empName}
               />
               <TextField
                 type="text"
@@ -129,6 +199,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setDesignation(e.target.value)}
+                value={designation}
               />
 
               <TextField
@@ -139,6 +210,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setPayperiod(e.target.value)}
+                value={payPeriod}
               />
 
               <TextField
@@ -149,6 +221,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setWorkedDyas(e.target.value)}
+                value={workedDays}
               />
 
               <Typography
@@ -167,6 +240,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setBasic(e.target.value)}
+                value={basic}
               />
 
               <TextField
@@ -177,6 +251,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setInsntive(e.target.value)}
+                value={insentive}
               />
 
               <TextField
@@ -187,6 +262,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setRent(e.target.value)}
+                value={rent}
               />
 
               <TextField
@@ -197,6 +273,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setMeal(e.target.value)}
+                value={meal}
               />
 
               <Typography
@@ -215,6 +292,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setFund(e.target.value)}
+                value={fund}
               />
               <TextField
                 type="text"
@@ -224,6 +302,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setTax(e.target.value)}
+                value={tax}
               />
 
               <TextField
@@ -234,6 +313,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => setLoan(e.target.value)}
+                value={loan}
               />
 
               <Typography
@@ -252,6 +332,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetCompanyWebsite(e.target.value)}
+                value={companyWebsite}
               />
               <TextField
                 type="email"
@@ -261,6 +342,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetEmail(e.target.value)}
+                value={email}
               />
               <TextField
                 type="text"
@@ -270,6 +352,7 @@ export default function ViewPaySlip() {
                 fullWidth
                 sx={{ my: 1 }}
                 onChange={(e) => SetPhone(e.target.value)}
+                value={phone}
               />
 
               <Box
@@ -291,6 +374,7 @@ export default function ViewPaySlip() {
                   mx={2}
                   variant="contained"
                   sx={{ borderRadius: 2, px: 2, ml: 5 }}
+                  onClick={updatePayslip}
                 >
                   Save Changes
                 </Button>
